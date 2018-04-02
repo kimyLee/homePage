@@ -29,7 +29,7 @@ export default {
   data () {
     return {
       projects: [
-        {name: '这个项目', img: 'project1.png', link: '#', git: '#'},
+        {name: '这个项目', img: 'project1.png', link: '#', git: 'https://github.com/kimyLee/homePage'},
         {name: '个人助手（移动端）', mobile: true, code: 'code.png', img: 'project2.png', link: 'http://kimy.coding.me/vue-assistant/#/', git: 'https://github.com/sxzy/vue-assistant'},
         {name: 'threejs 实验室', img: 'plane.png', link: 'http://kimy.coding.me/webglDemos/#/plane', git: 'https://github.com/kimyLee/webglStudy'},
         {name: '冰壶挑战', mobile: true, code: 'binghu.png', img: 'project3.png', link: 'https://kimylee.github.io/binghutiaozhan/#/', git: 'https://github.com/kimyLee/binghutiaozhan'},
