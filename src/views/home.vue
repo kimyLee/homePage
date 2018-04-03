@@ -1,7 +1,7 @@
 <template>
   <div class="home">
     <!-- todo列表 -->
-    <card title="TODO-LIST" :menus="taskOption" style="margin-left: 16px;" width="700">
+    <card title="TODO-LIST" :menus="taskOption" style="margin-left: 16px;" width='965'>
       <div style="display: flex;">
         <div class="list-todo">
           <span style="display: inline-block;color: #999;padding-left: 8px;padding-bottom: 6px;">TODO</span>
@@ -67,7 +67,15 @@
             </div>
           </draggable>
         </div>
-        <div class="list-done"></div>
+         <!-- e-chart面板 -->
+        <div class="task-charts">
+          <div id="taskCharts" style="width: 250px;height:250px;"></div>
+          <!-- 进度条 -->
+          <div class="bar-title">point:</div>
+          <div class="progress-bar"><span class="progress-inner-bar" :style="{width: pointPercent + '%'}"></span></div>
+          <div class="bar-title">task:</div>
+          <div class="progress-bar"><span class="progress-inner-bar" :style="{width: taskPercent + '%'}"></span></div>
+        </div>
       </div>
     </card>
     <!-- 天气面板 -->
@@ -212,6 +220,7 @@ import card from '@/components/card.vue'
 import rightSide from '@/components/rightSide.vue'
 import weather from '@/components/weather.vue'
 import demos from '@/components/demos.vue'
+import * as echarts from 'echarts'
 export default {
   name: 'home',
   components: { card, draggable, rightSide, weather, demos },
@@ -282,7 +291,8 @@ export default {
       currentTempTask: {},                     // 详情暂存数据
       currentTask: {},                      // 当前详情任务
       addTagShow: false,
-      addingTag: ''
+      addingTag: '',
+      myChart: ''
     }
   },
   created () {
@@ -291,6 +301,8 @@ export default {
   },
   mounted () {
     this.$nextTick(() => {
+      // this.myChart = echarts.init(document.getElementById('taskCharts'))
+      this.initCharts()
       // 绑定详情滚动事件
       this.scrollCallback = (e) => {
         clearTimeout(this.timer)
@@ -305,7 +317,76 @@ export default {
   destroyed () {
     document.querySelector('.task-detail-body').removeEventListener('scroll', this.scrollCallback)
   },
+  watch: {
+    taskPercent () {
+      this.initCharts()
+    }
+  },
+  computed: {
+    taskPercent () {
+      return (this.finishCards.length / (this.todoCards.length + this.finishCards.length)).toFixed(2) * 100
+    },
+    pointPercent () {
+      let finishPoint = this.finishCards.reduce((sum, cur) => {
+        return sum + (cur.points || 0)
+      }, 0)
+      let todoPoint = this.todoCards.reduce((sum, cur) => {
+        return sum + (cur.points || 0)
+      }, 0)
+      return (finishPoint / (todoPoint + finishPoint)).toFixed(2) * 100
+    }
+  },
   methods: {
+    initCharts () {
+      // echarts.dispose(document.getElementById('taskCharts'))
+      this.myChart = echarts.init(document.getElementById('taskCharts'))
+      // 指定图表的配置项和数据
+      var option = {
+        color: ['#9bd5dc', 'rgba(155, 213, 220, 0.5)'],
+        tooltip: {
+          trigger: 'item',
+          formatter: '{b}: {c} ({d}%)'
+        },
+        // legend: {
+        //   // orient: 'vertical',
+        //   x: 'left',
+        //   data: ['已完成', '未完成']
+        // },
+        series: [
+          {
+            // name: '访问来源',
+            hoverAnimation: false,
+            type: 'pie',
+            radius: ['50%', '70%'],
+            avoidLabelOverlap: false,
+            label: {
+              normal: {
+                show: false,
+                position: 'center'
+              },
+              emphasis: {
+                show: false,
+                textStyle: {
+                  fontSize: '30',
+                  fontWeight: 'bold'
+                }
+              }
+            },
+            labelLine: {
+              normal: {
+                show: false
+              }
+            },
+            data: [
+              {value: this.finishCards.length, name: '已完成'},
+              {value: this.todoCards.length, name: '未完成'}
+            ]
+          }
+        ]
+      }
+      // 使用刚指定的配置项和数据显示图表。
+      this.myChart.setOption(option)
+    },
     getList () {
       this.todoCards = JSON.parse(localStorage.getItem('todoCards')) || this.todoCards
       this.finishCards = JSON.parse(localStorage.getItem('finishCards')) || this.finishCards
@@ -444,6 +525,29 @@ export default {
     // -webkit-box-flex: 1;
     // -ms-flex: 1 1 auto;
     // flex: 1 1 auto;
+  }
+  .task-charts {
+    display: inline-block;
+    .bar-title {
+        padding-left: 4px;
+        padding-bottom: 4px;
+        color: #444;
+      }
+    .progress-bar {
+      margin-bottom: 16px;
+      width: 250px;
+      height: 20px;
+      border: 1px solid #eee;
+      box-sizing: border-box;
+      position: relative;
+      .progress-inner-bar {
+        transition: width .4s ease;
+        display: inline-block;
+        // width: 50%;
+        height: 100%;
+        background: #9bd5dc;
+      }
+    }
   }
   .task-card {
       display: flex;
