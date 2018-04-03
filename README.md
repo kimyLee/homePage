@@ -1,5 +1,6 @@
 # blog-example
 演示地址： https://kimylee.github.io/#/
+文档内容会有的，后续逐步更新，涉及前端一些基础和http相关，简单算法，以及一点实战···两天我只能先做这些了···
 
 > blog-example
 
