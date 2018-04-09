@@ -26,7 +26,6 @@ export default {
     background: #F7F6F2;
   }
   #app {
-
     font-family: '微软雅黑', Helvetica, Arial, sans-serif;
   }
   textarea input button {

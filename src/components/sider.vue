@@ -17,13 +17,19 @@
                <i class="el-icon-document list-item-icon"></i><span class="list-item-text">文档</span>
               </router-link>
             </li>
+           <li class="menu-list-item" @click="lockScreen" >
+               <i class="el-icon-mobile-phone list-item-icon"></i><span class="list-item-text">锁屏</span>
+            </li>
+           <li class="menu-list-item" @click="addNotice" >
+               <i class="el-icon-time list-item-icon"></i><span class="list-item-text">闹钟</span>
+            </li>
          </ul>
     </div>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
-// import myDropDown from '../myDropDown.vue'
+import { fullScreen, NotifyTimer } from '@/utils'
 export default {
   // props: ['info'],
   data () {
@@ -31,22 +37,63 @@ export default {
       headUrl: '/static/img/head.jpg',
       username: 'kimmy又叫夏小川',
       input: '',
-      focus: false
+      focus: false,
+      notifity: ''
     }
+  },
+  mounted () {
   },
   // components: { myDropDown },
   methods: {
+    lockScreen () {
+      fullScreen.initLockScreen('富强、民主、文明、和谐 自由、平等、公正、法治 爱国、敬业、诚信、友善').fullScreenSet()
+    },
     toggleInput (isBlur) {
       const $target = this.$el.querySelector('.search-panel')
       $target.style.width = isBlur ? '150px' : '200px'
     },
     handleIconClick () {
+    },
+    addNotice () {
+      if (this.notifity && this.notifity.notifity) {
+        return false
+      }
+      this.notifity = new NotifyTimer(3000, '一个有趣的任务')
     }
   }
 }
 </script>
 
 <style lang="scss" rel="stylesheet/scss">
+  .danmu {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    font-size: 360px;
+    align-items: center;
+    background: #333;
+    overflow: hidden;
+    color: #fcfcfc;
+    display: flex;
+    top: 0;
+    left: 0;
+    z-index: 9999;
+    .danmu-text {
+      position: absolute;
+      white-space: nowrap;
+      left: 0;
+      display: flex;
+      height: 100%;
+      align-items: center;
+      padding-left: 100vw;
+      animation:mymove 18s linear infinite;
+    }
+  }
+  @keyframes mymove {
+    from {transform: translateX(0)}
+    to {transform: translateX(-100%)}
+  }
   .sider {
     position: fixed;
     top: 60px;
