@@ -13,6 +13,11 @@
               </router-link>
             </li>
            <li class="menu-list-item">
+             <router-link to="calendar">
+               <i class="el-icon-mobile-phone list-item-icon"></i><span class="list-item-text">日历</span>
+              </router-link>
+            </li>
+           <li class="menu-list-item">
              <router-link to="article">
                <i class="el-icon-document list-item-icon"></i><span class="list-item-text">文档</span>
               </router-link>

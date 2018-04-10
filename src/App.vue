@@ -1,10 +1,36 @@
 <template>
   <div id="app">
-    <app-header></app-header>
+    <!-- 主体内容 -->
+    <app-header @login="showLogin = true"></app-header>
     <app-sider></app-sider>
     <div style="padding-left: 80px; padding-top: 60px;">
       <router-view/>
     </div>
+    <!-- 登陆弹窗 -->
+    <el-dialog title="登陆" :visible.sync="showLogin" custom-class="login-form" :close-on-click-modal="false">
+      <div>
+        <div class="create-task-item">
+          <span style="display: inlin-block;">用户名：</span>
+          <el-input
+            style="display: inline-block;width: 90%;"
+            placeholder="请输入用户名"
+            v-model="userinfo.name">
+          </el-input>
+        </div>
+        <div class="create-task-item">
+          <span style="display: inlin-block;">密码：</span>
+          <el-input
+            style="display: inline-block;width: 90%;"
+            placeholder="请输入密码"
+            v-model="userinfo.pwd">
+          </el-input>
+        </div>
+      </div>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="showLogin = false">取 消</el-button>
+        <el-button type="primary">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -13,7 +39,16 @@ import appHeader from '@/components/header.vue'
 import appSider from '@/components/sider.vue'
 export default {
   name: 'App',
-  components: { appHeader, appSider }
+  components: { appHeader, appSider },
+  data () {
+    return {
+      showLogin: false,
+      userinfo: {
+        name: '',
+        pwd: ''
+      }
+    }
+  }
 }
 </script>
 

@@ -10,6 +10,7 @@
        >
        <div>
          <ul class="menu-list">
+           <li class="menu-list-item" @click="$emit('login')"><i class="el-icon-upload2 list-item-icon"></i>登陆</li>
            <li class="menu-list-item"><i class="el-icon-setting list-item-icon"></i>个人设置</li>
            <li class="menu-list-item" ><i class="el-icon-menu list-item-icon"></i>快捷键</li>
            <li class="menu-list-item"><i class="el-icon-view list-item-icon"></i>更换主题</li>
@@ -31,8 +32,6 @@
           >
         </el-input>
       </span>
-    <!--</div>-->
-    <!-- <span class="login-user">6666</span> -->
   </div>
 </template>
 
@@ -42,14 +41,22 @@ export default {
   // props: ['info'],
   data () {
     return {
-      headUrl: '/static/img/head.jpg',
-      username: 'kimmy又叫夏小川',
+      headUrl: '/static/img/default.jpg',
+      username: '游客',
       input: '',
-      focus: false
+      focus: false,
+      showLogin: false,
+      userinfo: {
+        name: '',
+        pwd: ''
+      }
     }
   },
   // components: { myDropDown },
   methods: {
+    openLogin () {
+
+    },
     toggleInput (isBlur) {
       const $target = this.$el.querySelector('.search-panel')
       $target.style.width = isBlur ? '150px' : '200px'
@@ -61,6 +68,14 @@ export default {
 </script>
 
 <style lang="scss" rel="stylesheet/scss">
+// 创建任务弹窗样式
+.login-form {
+  // position: fixed;
+  // z-index: 999999;
+  .create-task-item {
+    margin-bottom: 16px;
+  }
+}
   .header-setting {
     padding: 0;
     // 下拉菜单
